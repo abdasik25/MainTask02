@@ -1,0 +1,33 @@
+package by.epam.javaTraining.lomat.model.logic.searcher.extreme;
+
+import by.epam.javaTraining.lomat.model.container.Disks;
+import by.epam.javaTraining.lomat.model.data.Song;
+import by.epam.javaTraining.lomat.model.logic.sorter.isSortedAscending;
+
+public class ExtremeDurationSearcher implements ExtremeSearcher {
+    @Override
+    public int search(Disks disks, int value, int l, int r) {
+        if (disks.size() == 0 || disks == null || !isSortedAscending.isSortedAccendingByDuration(disks)){
+            return -1;
+        }
+        Song[] arr = disks.getElements();
+        if (r >= l) {
+            int mid = l + (r - l) / 2;
+            //if the element is present at the middle itself
+            if (arr[mid].getDuration() == value)
+                return mid;
+
+            //if element is smaller than mid, then
+            //it can only be present in left subarray
+            if (arr[mid].getDuration() > value)
+                return search(disks, value, l, mid - 1);
+
+            //else the element can only be present
+            //in right subarray
+            return search(disks, value, mid + 1, r);
+        }
+        //we reach here when element is not present
+        //in array
+        return -1;
+    }
+}
